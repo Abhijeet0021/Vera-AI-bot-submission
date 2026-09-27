@@ -33,6 +33,212 @@ def compose(category: dict, merchant: dict, trigger: dict, customer: dict | None
     return msg.to_dict()
 
 
+DOCS_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vera AI WhatsApp Engagement Engine — API Documentation</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #151e2e;
+      --border: #243247;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #6366f1;
+      --get-badge: #10b981;
+      --post-badge: #3b82f6;
+      --code-bg: #0d131f;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 32px 16px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    header {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .title-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+    h1 { font-size: 26px; font-weight: 700; color: #fff; }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-version { background: #312e81; color: #a5b4fc; }
+    .badge-status { background: #064e3b; color: #6ee7b7; }
+    p.subtitle { color: var(--text-muted); font-size: 15px; }
+    .endpoint-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+    .endpoint-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .method {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+    .method-get { background: #065f46; color: #6ee7b7; }
+    .method-post { background: #1e40af; color: #93c5fd; }
+    .path { font-family: monospace; font-size: 16px; font-weight: 600; color: #fff; }
+    .desc { font-size: 14px; color: var(--text-muted); margin-bottom: 14px; }
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      color: #38bdf8;
+      overflow-x: auto;
+      margin-bottom: 10px;
+    }
+    .label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #cbd5e1;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-row">
+        <h1>Vera AI WhatsApp Engagement Engine</h1>
+        <span class="badge badge-version">v2.0.0</span>
+        <span class="badge badge-status">Online</span>
+      </div>
+      <p class="subtitle">Magicpin AI Challenge — Production 4-Context Synthesis Pipeline with hard-fact grounding and zero hallucinations.</p>
+    </header>
+
+    <!-- Healthz -->
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="path">/v1/healthz</span>
+      </div>
+      <p class="desc">Liveness probe polled by the judge harness every 60 seconds.</p>
+      <div class="label">Sample Response (200 OK)</div>
+      <pre class="code-block">{ "status": "ok", "uptime_seconds": 3600, "contexts_loaded": { "category": 5, "merchant": 50, "customer": 200, "trigger": 100 } }</pre>
+    </div>
+
+    <!-- Metadata -->
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="path">/v1/metadata</span>
+      </div>
+      <p class="desc">Returns model identity, engineering approach, and author contact.</p>
+      <div class="label">Sample Response (200 OK)</div>
+      <pre class="code-block">{
+  "team_name": "Magicpin Staff AI Architects",
+  "model": "vera-neural-grounded-v2",
+  "approach": "4-Context Synthesis Pipeline with hard-fact grounding validator...",
+  "version": "2.0.0"
+}</pre>
+    </div>
+
+    <!-- Context -->
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="path">/v1/context</span>
+      </div>
+      <p class="desc">Ingests context updates idempotently across category, merchant, trigger, and customer scopes.</p>
+      <div class="label">Sample Request Body</div>
+      <pre class="code-block">{
+  "scope": "category" | "merchant" | "customer" | "trigger",
+  "context_id": "dentists",
+  "version": 1,
+  "payload": { ... }
+}</pre>
+      <div class="label">Sample Response (200 OK)</div>
+      <pre class="code-block">{ "accepted": true, "ack_id": "ack_abc123", "stored_at": "2026-04-26T10:00:00.123Z" }</pre>
+    </div>
+
+    <!-- Tick -->
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="path">/v1/tick</span>
+      </div>
+      <p class="desc">Periodic evaluation tick where the engine inspects active triggers and outputs proactive engagement messages.</p>
+      <div class="label">Sample Request Body</div>
+      <pre class="code-block">{ "now": "2026-04-26T10:30:00Z", "available_triggers": ["trg_recall_priya"] }</pre>
+      <div class="label">Sample Response (200 OK)</div>
+      <pre class="code-block">{
+  "actions": [
+    {
+      "conversation_id": "conv_001",
+      "merchant_id": "m_001",
+      "send_as": "vera",
+      "body": "Priya, Dr. Meera noticed your 6-month checkup is due...",
+      "cta": "open_ended",
+      "rationale": "Clinical recall anchor with loss aversion lever"
+    }
+  ]
+}</pre>
+    </div>
+
+    <!-- Reply -->
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="path">/v1/reply</span>
+      </div>
+      <p class="desc">Processes incoming customer/merchant responses through the multi-turn state machine (send, wait, or end).</p>
+      <div class="label">Sample Request Body</div>
+      <pre class="code-block">{ "conversation_id": "conv_001", "merchant_id": "m_001", "message": "Yes, please book 5 PM", "turn_number": 2 }</pre>
+      <div class="label">Sample Response (200 OK)</div>
+      <pre class="code-block">{
+  "action": "send",
+  "body": "Slot reserved for 5 PM tomorrow. See you at the clinic!",
+  "cta": "open_ended",
+  "rationale": "High-intent booking transition; action mode confirmed"
+}</pre>
+    </div>
+
+    <footer>
+      Magicpin AI Challenge &bull; Vera WhatsApp Engagement Engine
+    </footer>
+  </div>
+</body>
+</html>
+"""
+
+
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
     """Multi-threaded HTTP server for high concurrency and zero blocking."""
     daemon_threads = True
@@ -55,6 +261,15 @@ class VeraRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _send_html(self, status_code: int, html_str: str):
+        body = html_str.encode("utf-8")
+        self.send_response(status_code)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Connection", "keep-alive")
+        self.end_headers()
+        self.wfile.write(body)
+
     def do_GET(self):
         path = self.path.split("?")[0].rstrip("/")
 
@@ -67,6 +282,7 @@ class VeraRequestHandler(BaseHTTPRequestHandler):
                 "version": "2.0.0",
                 "uptime_seconds": uptime,
                 "endpoints": {
+                    "docs": "GET /docs",
                     "healthz": "GET /v1/healthz",
                     "metadata": "GET /v1/metadata",
                     "context": "POST /v1/context",
@@ -75,6 +291,10 @@ class VeraRequestHandler(BaseHTTPRequestHandler):
                 },
                 "contexts_loaded": counts
             })
+            return
+
+        elif path == "/docs":
+            self._send_html(200, DOCS_HTML)
             return
 
         elif path == "/v1/healthz":

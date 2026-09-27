@@ -1,0 +1,2 @@
+# Vera AI WhatsApp Engagement Engine
+# Zero external runtime dependencies (Python standard library only)
